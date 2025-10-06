@@ -1,0 +1,17 @@
+Supervised vs Unsupervised learning
+- Supervised is when you label the data (some portion of overall data) and let rest be the test-data on which you let model predict the label. 
+- Unsupervised is when you let the model figure out insights within the data on its own like clustering etc.
+
+Classification vs Regression
+- Classification is when you categorize input into some predefined output values.
+- Regression is when you lead to output which is of continous numerical form instead of fixed discrete values.
+
+K means clustering: An unsuervised method used to partition dataset into distinct k non-overlapping clusters. The algorithm starts by randomly picking centroid points and then assigning all points to their nearest centroid- then it keeps updating the centroid position to be the average of all its memebers at every iteration- aiming to minimize the distance b/w points and maximize the distance b/w clusters. It can be used to find out consumer cluster based on spending patterns, age, income etc and can be used to have targeted marketing to eligible members of cluster.
+
+K nearest neighbors: A supervised method used for both classification and regression. Based on any of the ways (Euclidean/ Manhattan) to compute distance in any dimensional space, it find out k nearest neighbors to the input vector and by either majority or by average, it determines the output for new vector.
+
+Decision tree: a flow chart like structure where each node presents a chance-event or decision point and leaf node represents the final outcome. They are built based on train data and are prone to overfit by remembering training data too well. Analogy: You ask a person for directions and the answer is very specific to cat and dogs sitting on the street. This works only if the input is exact same as train data- if dog moves, it fails due to overtraining.
+
+Random forest: To overcome the overfitting problem by spliting/sharding the data across multiple different decision trees and at inference time do an average of the output of all individual decision trees. Analogy is you ask multiple people for direction and more or less a majority will give you good general direction.
+
+Gradient descent: Uses multiple decision tree-stumps (height 1) however each decision tree has lower impact that previous one in the chain. Uses a loss function whereby it sets Y to be the error from prediction at each state and also a learning rate which minimizes the impact of later trees.
