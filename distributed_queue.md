@@ -1,16 +1,15 @@
 ### Basics
 
 #### Segments
-Broker will store messages in an append only immutable log on disk with offset position. Broker will name the segment log/data files using minimum messge-offset e.g. `0000100.log`. This will enable broker to find out which log file will have the offset query by consumer on read path. There will be `0000100.index` and `00001000.timestamp` file within the same segment too which will have sparse mapping of Offsets/Timestamps and their corrresponding byte-location. This will enable Broker to provide a quick seek to an offset or timestamp.
+Broker will store messages in an append only immutable log on [[disk]] with offset position. Broker will name the segment log/data files using minimum messge-offset e.g. `0000100.log`. This will enable broker to find out which log file will have the offset query by consumer on read path. There will be `0000100.index` and `00001000.timestamp` file within the same segment too which will have sparse mapping of Offsets/Timestamps and their corrresponding byte-location. This will enable Broker to provide a quick seek to an offset or timestamp.
 
-#### Broker discovery
-An initial list of servers is supplied as seed to all producer and consumer, this list will be ensure to be of healthy hosts and updated based on host status. Producer/Consumer will talk to these nodes to get metadata about partitions of a topic and leaders of those partitions- after that they will connect to the actual broers they need to.
+#### Broker [[discovery]]
+An initial list of servers is supplied as seed to all producer and consumer, this list will be ensure to be of healthy hosts and updated based on host status. Producer/Consumer will talk to these nodes to get metadata about partitions of a topic and leaders of those partitions- after that they will connect to the actual brokers they need to.
 
 #### Co-ordinator
 Co-ordinator is the node which performs the role of picking a leader consumer who can do partition assignment among consumer groups and co-ordinator also keeps tab on status of consumers by doing health checks and if any consumer dies, it triggers a consumer rebalancing by sharing the information about consumer level commited offsets
 
 #### Replication
-
 
 ### Dive Deep
 - Fault tolerance

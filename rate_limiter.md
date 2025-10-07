@@ -8,13 +8,13 @@
      TokenBucket to allow for bursty loads.
 - Redis based counters
     - Use redis tokenBucket counter perKey `userId: {tokensRemaining: <>, lastInvocation:<>}`. 
-    - Use Lua script to atomically
+    - Use [[Lua]] script to atomically
         - read current token counter
         - refill based on refill rate and time spent since last (if enough time has passed to be refilled)
         - decrement if tokens available
         - return allowed/not-allowed signal
     - Without Lua script, two servers might hit redis and execute these operations interleaved with each other and run into race conditions.
-- Sliding window
+- [[Sliding window]]
     - Sliding window vs Fixed-Window/Bucketized-Time: Sliding window is going to be more strictly enforced and accurate strategy, however it would require you keep track of every request's time stamp and hence increase the amount of memory required and if we use Redis Sorted Set, it would also make it CPU-exhausiting and reduce throughput. Fixed-Window approach (i.e. simple counter) would drastically reduce the memory required and the speed of operations/throughput. We would go with latter for space and time efficiency. Even though the downtime is that within 1-time-period(minute) you could have more than required tps used by caller if they are at end of first minute and beginning of second minute.
 - Fail over/Fault tolerance
     - Use redis sharding to allow for high throughput. We can shard by userId/clientId key.
