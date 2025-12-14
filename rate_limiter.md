@@ -1,5 +1,5 @@
 ### Question
-*Design a distribtued rate limiter to throttle api request per user across services*
+*Design a distributed rate limiter to throttle api request per user across services*
 
 ### Dive deep areas
 - Token bucket vs leaky bucket
@@ -34,6 +34,6 @@
     - We can fail open to let in the request when we fail to determine limit or fail-close when we run into failure. This is a tradeoff discussion.
     - Fail open would preserve CX but leave the door open for abuse.
 - Token refill strategy.
-    - Via a cron refill worker: More cpu utilization by having consntantly someone crawl and update tokens. 
+    - Via a cron refill worker: More cpu utilization by having constantly someone crawl and update tokens. 
     - Lazy refill: when needed, we refill and calculate, CPU efficient with minor latency impact if at all.
 - Per-region limits

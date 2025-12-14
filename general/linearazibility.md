@@ -8,7 +8,7 @@ The property of your database that makes it behave as if its a single register t
 - Primary applications are where you need this kind of strong consistency of reflecting updates immediately with no staleness such as leader election. Zookeeper is a linearizable storage.
 
 3. How can we typically build it?
-- Since we can't have a single host to fault tolerance and we can't have single leader with all writes routed to leader because it might get network partitioned and not know about it and we might end up with split brian where two leaders are accepting writes and our linearizability guarrantees are out of the window. Hence a distributed consensus works best here to pick leader and then leader commits with quorum like setup of raft. That ensures a total order of operation which is honored by everyone and is resilient to leader crashes too.
+- Since we can't have a single host to fault tolerance and we can't have single leader with all writes routed to leader because it might get network partitioned and not know about it and we might end up with split brain where two leaders are accepting writes and our linearizability guarrantees are out of the window. Hence a distributed consensus works best here to pick leader and then leader commits with quorum like setup of raft. That ensures a total order of operation which is honored by everyone and is resilient to leader crashes too.
 
 4. Why is quorum not sufficient to ensure this?
 - Quorum means that number of replicas to consult for read is r and write w then r + w > n. And when reading you fetch data from all `r` replicas and then you could still end up in senario where if 5 total replicas, 
@@ -25,18 +25,22 @@ The property of your database that makes it behave as if its a single register t
 - Note since each shard needs to ensure total order of operations, it can NOT have parallel writing of records, effectively paxos-consensus call/log becomes the choke point. Since each which will further be constrained by how much network roundtrip we have. 
 
 in this case lets assume 
-`leader : IAD` and consensus requires that quorum across `IAD+ PDX`, per shard throughput is
+`leader : IAD`, and consensus requires that quorum across `IAD + PDX`, per shard throughput is
+
+Note: For a Spanner *write* transaction to commit, the Paxos leader must propose the write, and a quorum (a majority) of the voting replicas must acknowledge and log the write. This process requires at least one RTT between the leader and the farthest replica in the quorum.
+$$\text{Write Latency} \approx \text{RTT}_{\text{Leader} \leftrightarrow \text{Farthest Quorum Member}} + \text{TrueTime Commit Wait}$$
+Truetime commit wait accounts for uncertainty of clock sync time and is typically small 7-10ms. For these estimations, we'll focus on RTT as the dominant inter-region factor.
+
 ```
 | RTT to quorum               | Max write throughput |
 | --------------------------- | -------------------- |
-| 160 ms + 50m                | 5 writes/sec         | e.g. Tokyo to IAD(leader) for write request, then IAD to PDX to building quorum
+| 160 ms + 50m+ 160ms         | 3 writes/sec         | e.g. Tokyo to IAD(leader) for write request, then IAD to PDX to building quorum, then IAD to Tokyo to communicate quorum
 | 50 ms                       | 20 writes/sec        | e.g. IAD(leader) to PDX
 | 30 ms                       | 33 writes/sec        | 
 | 10 ms (co-located replicas) | 100+ writes/sec      |
 ```
 
 If we can have 1000 shards, out throughput will be 1000 x <number from above>
-
 
 6. Read throughput
 - note: reads do not go through consensus. read-only replica of spanner can serve snapshot read at very high throughput (10k-100k+).

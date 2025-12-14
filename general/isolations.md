@@ -62,4 +62,3 @@ Note: this is all doable easily because Postgres is a single node database. And 
 ##### How is Serializable transaction property ensured for transacion spawning multiple nodes?
 
 Spanner uses a transaction co-ordinator and when committing a transaction T it keeps track of every key that it depended on and at the commit time, it verifies that none of those keys got their updates/state-change and if they did, it aborts this transaction.
-
