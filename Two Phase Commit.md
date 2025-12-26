@@ -1,4 +1,4 @@
-[[Tow phase commit]] is to ensure atomicity and consistency guarrantee when a transaction involved more than one nodes. For a single node, you can easily lock the row or fail the conflicting operation at commit-time to provide atomicity. However, doing it across nodes require a network call to communicate and decide if transaction can be committed or not.
+[[Tow Phase Commit]] is to ensure atomicity and consistency guarrantee when a transaction involved more than one nodes. For a single node, you can easily lock the row or fail the conflicting operation at commit-time to provide atomicity. However, doing it across nodes require a network call to communicate and decide if transaction can be committed or not.
 
 > how it works
 

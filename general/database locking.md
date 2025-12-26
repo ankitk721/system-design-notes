@@ -3,7 +3,7 @@
     
 - [[**Pessimistic Locking]]** is ideal when **conflicts are frequent** because it minimizes wasted work and provides a clearer, guaranteed mechanism for sequencing updates, though at the cost of reduced concurrency.
 
-## 2 Phase Commit [[2PC]] ##
+## [[Two Phase Commit]] [[2PC]] ##
 
 Needed when the data required for a trasaction is across more than one node. Your service or one of the nodes become a co-ordinator.
 > co-ordinator sends prepare command to all participant DB nodes- and keeps the progress WAL-ed in its disk in case it crashes at any point in middle of it.
