@@ -1,4 +1,4 @@
-### [[Disk]] Generals
+### [[disk]] Generals
 
 - [[WAL]]:  Write stuff you're planning to do so if you crash and recover, the HD will retain the info for process.
 
